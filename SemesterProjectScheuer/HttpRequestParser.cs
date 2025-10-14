@@ -10,10 +10,8 @@ public class HttpRequestParser
     public static async Task<HttpRequest> ParseFromStreamAsync(Stream stream)
     {
         //reader soll nach dem Lesen nicht geschlossen werden
-        using var
-            reader = new StreamReader(stream, Encoding.UTF8, false, 8192,
-                leaveOpen: true); // anm. using var -> sorgt hier dafür, dass der Reader am Ende des Gültikeitszeitraums automatisch freigegeben wird, also reader.Dispose() wird automatisch aufgerufen 
-        var requestLine = await reader.ReadLineAsync();
+        using var reader = new StreamReader(stream, Encoding.UTF8, false, 8192, leaveOpen: true); 
+        var requestLine = await reader.ReadLineAsync(); //umwandlung von stream zu string
         if (string.IsNullOrWhiteSpace(requestLine))
         {
             throw new Exception("Leere oder ungültige Request-Line.");
@@ -30,8 +28,7 @@ public class HttpRequestParser
         var path = tokens[1];
 
         // Die Header Zeilen werden nacheinander gelesen bis ""
-        string?
-            line; // anm. ? -> “nullable string”, also ein string, der auch den Wert null annehmen darf. Macht hier sinn weil nur mindestens 
+        string? line; // anm. ? -> “nullable string”, also ein string, der auch den Wert null annehmen darf
         string? authorization = null;
         int contentLength = 0;
         while (!string.IsNullOrEmpty(line = await reader.ReadLineAsync()))
@@ -60,7 +57,7 @@ public class HttpRequestParser
             Method = method,
             Path = path,
             Body = body,
-            Authorization = authorization ?? string.Empty
+            Authorization = authorization ?? string.Empty // ?? = wenn links NULL ist, mach rechts
         };
     }
 }

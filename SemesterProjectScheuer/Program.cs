@@ -3,11 +3,11 @@ namespace SemesterProjectScheuer
 {
     class main
     {
-        static void Main()
+        static async Task Main()
         {
             int port = 10001;
             HttpServer meinServer = new HttpServer(port);
-            meinServer.Start();
+            Task serverTask = meinServer.Start();
 
             Console.WriteLine("Press 'q' to stop the server...");
             while (true)
@@ -20,6 +20,7 @@ namespace SemesterProjectScheuer
                 }
             }
             Console.WriteLine("Server gestoppt. Tschüss!");
+            await serverTask;
         }
     }
 }

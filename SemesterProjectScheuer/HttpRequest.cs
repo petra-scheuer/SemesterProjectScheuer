@@ -1,10 +1,10 @@
 namespace SemesterProjectScheuer;
 
 // Definiert woraus ein Request besteht
-// 1. Method (GET, POST, PUT, PATCH, DELETE)
+// 1. Method (GET, POST, PUT, PATCH, DELETE) 
 // 2. Path ( z.b. /users)
 // 3. Body ( Body Daten)
-// 4. Authorization (Bearer Token)
+// 4. Authorization (Bearer Token) -> optional
 public class HttpRequest
 {
     public string Method { get; set; } = string.Empty; // anm. zu string.Empty ->  macht man um sie gleich mit einem Leeren String zu initialoisieren, das schützt vor NULL values (weil es ein "" ist) und man vermeidet damit NullReferenceExceptions.

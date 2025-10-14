@@ -9,7 +9,7 @@ public class HttpServer(int port)
     private TcpListener _listener = null!;
     private bool _isListening;
 
-    public async void Start()
+    public async Task Start()
     {
         _isListening = true;
         _listener = new TcpListener(IPAddress.Any, _port); // Erstellt einen TCP-Listener, der auf allen IP-Adressen und dem angegebenen Port auf Verbindungen wartet
@@ -24,8 +24,8 @@ public class HttpServer(int port)
                 var client = await _listener.AcceptTcpClientAsync();
                 Console.WriteLine($"[HttpServer] Client connected.");
                 
-                //Asynchrone Verarbeitung der clients
-                _ = HandleClientAsync(client);
+                //Asynchrone Verarbeitung der clients 
+                _ = HandleClientAsync(client); //Discard -> sagt dem compiler "ich weiss, dass ich auf die Variable nicht warten muss"
             }
             catch (SocketException ) when (!_isListening)
             {
@@ -48,9 +48,9 @@ public class HttpServer(int port)
 
     private async Task HandleClientAsync(TcpClient client)
     {
-        using(client)
+        using(client) // wenn ich fertig bin, wird der client automattisch geschlossen
 
-        await using (var stream = client.GetStream()) //ergänzung zu var → bedeutet, dass der Typ der variable zur Compile zeit bestimmt wird (Sagt dem Compiler, erkenn den typ selbst)
+        await using (var stream = client.GetStream()) 
         {
             try
             {
