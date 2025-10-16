@@ -48,7 +48,7 @@ public class HttpServer(int port)
 
     private async Task HandleClientAsync(TcpClient client)
     {
-        using(client) // wenn ich fertig bin, wird der client automattisch geschlossen
+        using(client) // wenn ich fertig bin, wird der client automatisch geschlossen
 
         await using (var stream = client.GetStream()) 
         {

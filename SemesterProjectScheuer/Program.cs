@@ -8,6 +8,8 @@ namespace SemesterProjectScheuer
             int port = 10001;
             HttpServer meinServer = new HttpServer(port);
             Task serverTask = meinServer.Start();
+            
+            DatabaseManager.SetupTables();
 
             Console.WriteLine("Press 'q' to stop the server...");
             while (true)
@@ -20,6 +22,7 @@ namespace SemesterProjectScheuer
                 }
             }
             Console.WriteLine("Server gestoppt. Tschüss!");
+            DatabaseManager.ResetTables();
             await serverTask;
         }
     }
