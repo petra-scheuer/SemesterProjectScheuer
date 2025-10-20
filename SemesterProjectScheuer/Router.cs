@@ -7,6 +7,8 @@ public class Router
     public static HttpResponse Route(HttpRequest request)
     {
         var usersController   = new UsersController();
+        var mediaController = new MediaController();
+        var ratingsController = new RatingsController();
         
         if (request.Path.StartsWith("/users"))
         {
