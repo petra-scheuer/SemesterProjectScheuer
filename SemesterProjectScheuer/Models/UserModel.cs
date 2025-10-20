@@ -2,10 +2,18 @@ namespace SemesterProjectScheuer.Models;
 
 public class UserModel
 {
+    public string username { get; set; }
+    
 
 }
 public class RegisterUser
 {    
-    public string Username { get; set; }
-    public string Password { get; set; }
+    public string username { get; set; }
+    public string password { get; set; }
+}
+
+public class LoginUser
+{    
+    public string username { get; set; }
+    public string password { get; set; }
 }

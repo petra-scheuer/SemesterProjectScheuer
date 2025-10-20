@@ -4,12 +4,15 @@ namespace SemesterProjectScheuer.Controller;
 
 public class UsersController
 {
-    private UserService _UserService = new UserService();
+    private UserService _userService = new UserService();
     public HttpResponse Handle(HttpRequest request)
     {
-        if (request.Method == "POST")
+        string path = request.Path;
+        if (path == "/")
+            return new HttpResponse() { StatusCode = 404 };
+        if (path == "/users/register" && request.Method == "POST")
         {
-            bool success = _UserService.RegisterUser(request);
+            bool success = _userService.RegisterUser(request);
             if (success)
             {
                 return new HttpResponse
@@ -29,15 +32,28 @@ public class UsersController
                 };
             }
         }
-        else
+
+
+        if (path == "/users/login" && request.Method == "POST")
         {
+            var token = _userService.LoginUser(request);
+            Console.WriteLine(token);
             return new HttpResponse
-            {
-                StatusCode = 404,
-                ContentType = "text/plain",
-                Body = "Not found!"
-            };
+                {
+                    StatusCode = 200,
+                    ContentType = "text/plain",
+                    Body = token
+                };
         }
+        {
+                return new HttpResponse
+                {
+                    StatusCode = 400,
+                    ContentType = "text/plain",
+                    Body = "Some error occured!"
+                };
+        }
+        
     }
 
     
