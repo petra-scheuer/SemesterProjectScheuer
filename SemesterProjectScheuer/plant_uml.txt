@@ -1,0 +1,164 @@
+@startuml
+allowmixing
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+
+package "Server"{
+
+class Program {
+    + Main() : void
+  }
+
+  class HttpServer {
+    - _port : int
+    - _listener : TcpListener
+    - _isListening : bool
+    + Start() : void
+    + Stop() : void
+    - HandleClientAsync(client : TcpClient) : Task
+  }
+
+  class HttpRequest {
+    + Method : string
+    + Path : string
+    + Body : string
+    + Authorization : string
+  }
+
+  class HttpRequestParser {
+    + ParseFromStreamAsync(stream : Stream) : Task<HttpRequest>
+  }
+
+
+  class HttpResponse {
+    + StatusCode : int
+    + ContentType : string = "text/plain"
+    + Body : string = ""
+    + GetBytes() : byte[]
+    - GetStatusInText(statusCode : int) : string
+  }
+
+}
+
+Program --> HttpServer : erstellt
+HttpServer ..> HttpRequestParser : benutzt
+HttpServer ..> Router : ruft Route(...)
+HttpServer ..> HttpResponse : sendet zurück
+Router ..> HttpRequest : liest
+Router ..> HttpResponse : erzeugt
+HttpRequestParser ..> HttpRequest : erzeugt
+
+
+package "Presentation Layer" {
+
+
+  class AuthController <<Controller>> {
+    +login(req: ILoginRequestDTO): ITokenDTO
+    +register(user: IUserDTO): IUserDTO
+    +logout(): bool
+  }
+
+  class UsersController <<Controller>> {
+    +getProfile(user_id: ID): IUserDTO
+    +leaderboard(): List<IUserDTO>
+    +editProfile(user: IUserDTO): bool
+  }
+
+  class RatingsController <<Controller>> {
+    +listRatingsByMedia(media_id: ID): List<IRatingDTO>
+    +addRating(media_id: ID, rating: IRatingDTO): bool
+    +updateRating(media_id: ID, rating: IRatingDTO): bool
+    +deleteRating(media_id: ID): bool
+    +likeRating(rating_id: ID): bool
+  }
+
+  class MediaController <<Controller>> {
+    +getMediaByTitle(media_title: String): IMediaDTO
+    +filterMedia(filter: SearchMediaFilter): IMediaDTO
+    +createMedia(media: IMediaDTO): bool
+    +updateMedia(media_id: ID, media: IMediaDTO): bool
+    +deleteMedia(media_id: ID): bool
+    +markFavoriteMedia(media_id: ID): bool
+    +unmarkFavoriteMedia(media_id: ID): bool
+    +recommendationsByUser(user_id: ID): List<IMediaDTO>
+  }
+}
+
+package "Business Layer" {
+  package "Service Interfaces" {
+    interface IAuthService <<Service>>
+    interface IUserService <<Service>>
+    interface IRatingService <<Service>>
+    interface IMediaService <<Service>>
+    interface IRecommendationService <<Service>>
+  }
+
+  package "Service Implementations" {
+    class AuthServiceImpl <<Service>>
+    class UserServiceImpl <<Service>>
+    class RatingServiceImpl <<Service>>
+    class MediaServiceImpl <<Service>>
+    class RecommendationServiceImpl <<Service>>
+  }
+
+  package "DTOs (Interfaces + Simple Impl)" {
+    interface ILoginRequestDTO
+    interface ITokenDTO
+    interface IUserDTO
+    interface IRatingDTO
+    interface IMediaDTO
+  }
+}
+
+package "Data Layer" {
+  package "Repositories" {
+    class UserRepository <<Repository>>
+    class RatingRepository <<Repository>>
+    class MediaRepository <<Repository>>
+  }
+  database "DB" as DB
+}
+
+' --- Routing ---
+Router --> AuthController : route()
+Router --> UsersController
+Router --> RatingsController
+Router --> MediaController
+
+' --- Controllers build Service interfaces in Constructor ---
+AuthController --> IAuthService
+UsersController --> IUserService
+RatingsController --> IRatingService
+MediaController --> IMediaService
+MediaController --> IRecommendationService : recommendations()
+
+' --- Controllers use DTOs for communication ---
+AuthController ..> ILoginRequestDTO
+AuthController ..> ITokenDTO
+AuthController ..> IUserDTO
+UsersController ..> IUserDTO
+RatingsController ..> IRatingDTO
+MediaController ..> IMediaDTO
+
+' --- Implementation of Interfaces ---
+AuthServiceImpl ..|> IAuthService
+UserServiceImpl ..|> IUserService
+RatingServiceImpl ..|> IRatingService
+MediaServiceImpl ..|> IMediaService
+RecommendationServiceImpl ..|> IRecommendationService
+
+' --- Service use repositories for DB Access ---
+AuthServiceImpl ..> UserRepository
+UserServiceImpl ..> UserRepository
+RatingServiceImpl ..> RatingRepository
+MediaServiceImpl ..> MediaRepository
+RecommendationServiceImpl ..> UserRepository
+RecommendationServiceImpl ..> RatingRepository
+RecommendationServiceImpl ..> MediaRepository
+
+' --- Data access ---
+UserRepository --> DB
+RatingRepository --> DB
+MediaRepository --> DB
+@enduml
