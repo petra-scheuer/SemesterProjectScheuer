@@ -8,12 +8,12 @@ public class UserModel
 }
 public class RegisterUser
 {    
-    public string username { get; set; }
-    public string password { get; set; }
+    public string username { get; }
+    public string password { get; }
 }
 
 public class LoginUser
 {    
-    public string username { get; set; }
-    public string password { get; set; }
-}
+    public string username { get; }
+    public string password { get; }
+} 
