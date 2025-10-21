@@ -2,3 +2,8 @@ docker compose up -d
 
 github link:
 https://github.com/petra-scheuer/SemesterProjectScheuer/tree/main/SemesterProjectScheuer
+
+
+curl script:
+chmod curl_script.sh                                                                 
+./curl_script.sh
