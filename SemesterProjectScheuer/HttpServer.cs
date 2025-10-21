@@ -41,8 +41,8 @@ public class HttpServer(int port)
     }
     public void Stop()
     {
-        _listener.Stop();
         _isListening = false;
+        try { _listener.Stop(); } catch { /* ignoriiere */ }
         Console.WriteLine("[HttpServer] Server gestopped.");
     }
 
