@@ -1,7 +1,10 @@
 namespace SemesterProjectScheuer.Controller;
+using SemesterProjectScheuer.Repository;
+using SemesterProjectScheuer.Services;
 
 public class MediaController
 {
+    private MediaService _mediaService = new MediaService(new MediaRepository());
     public HttpResponse Handle(HttpRequest request)
     {
         string path = request.Path;
@@ -9,12 +12,25 @@ public class MediaController
             return new HttpResponse() { StatusCode = 404 };
         if (path == "/media/register" && request.Method == "POST")
         { 
-            return new HttpResponse
+            bool success = _mediaService.RegisterMedia(request);
+            if (success)
             {
-                    StatusCode = 404,
+                return new HttpResponse
+                {
+                    StatusCode = 200,
                     ContentType = "text/plain",
-                    Body = "Not yet implemented."
-            };
+                    Body = "Media registered successfully!"
+                };
+            }
+            else
+            {
+                return new HttpResponse
+                {
+                    StatusCode = 400,
+                    ContentType = "text/plain",
+                    Body = "Some error occured!"
+                };
+            }
         }
 
 

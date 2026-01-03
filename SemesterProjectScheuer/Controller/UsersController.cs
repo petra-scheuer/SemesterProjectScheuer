@@ -1,10 +1,11 @@
+using SemesterProjectScheuer.Repository;
 using SemesterProjectScheuer.Services;
 
 namespace SemesterProjectScheuer.Controller;
 
 public class UsersController
 {
-    private UserService _userService = new UserService();
+    private UserService _userService = new UserService(new UserRepository());
     public HttpResponse Handle(HttpRequest request)
     {
         string path = request.Path;

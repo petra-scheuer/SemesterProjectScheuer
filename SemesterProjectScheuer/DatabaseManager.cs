@@ -5,7 +5,7 @@ namespace SemesterProjectScheuer;
 public class DatabaseManager
 {
     private static string _connectionString =
-        "Host=localhost;Port=5433;Database=semesterproject;Username=postgres;Password=postgres";
+        "Host=localhost;Port=5435;Database=semesterproject;Username=postgres;Password=postgres";
     
     public static bool TestConnection()
     {
@@ -36,10 +36,27 @@ public class DatabaseManager
                                       
         );
     ";
+        const string createMediasTable = @"
+        CREATE TABLE IF NOT EXISTS media (
+            created_at Timestamp without time zone NOT NULL,
+            title VARCHAR(50) PRIMARY KEY,
+            description VARCHAR(255) NOT NULL,
+            media_type VARCHAR(50) NOT NULL,
+            release_year INT NOT NULL,
+            genres VARCHAR(50) NOT NULL,
+            age_restriction INT NOT NULL
+      
+        )
+
+    ";
+        
         NpgsqlConnection conn = GetConnection();
         
-        using var cmd = new NpgsqlCommand(createUsersTable, conn);
-        cmd.ExecuteNonQuery();
+        using var userCmd = new NpgsqlCommand(createUsersTable, conn);
+        userCmd.ExecuteNonQuery();
+        
+        using var mediacmd = new NpgsqlCommand(createMediasTable, conn);
+        mediacmd.ExecuteNonQuery();
         conn.Close();
         
     }
@@ -56,6 +73,7 @@ public class DatabaseManager
         NpgsqlConnection conn = GetConnection();
         const string dropUsersTable = @"
         Drop TABLE myusers;
+        DROP TABLE media;
     ";
         
         using var cmd = new NpgsqlCommand(dropUsersTable, conn);

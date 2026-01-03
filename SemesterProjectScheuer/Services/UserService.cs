@@ -1,12 +1,19 @@
 using SemesterProjectScheuer.Models;
 using SemesterProjectScheuer.Repository;
 using Newtonsoft.Json;
+using SemesterProjectScheuer.IRepositories;
 
 namespace SemesterProjectScheuer.Services;
 
 public class UserService
 {
-    private UserRepository _userRepository = new UserRepository();
+    private readonly IUserRepository _userRepository;
+
+    public UserService(IUserRepository userRepository)
+    {
+        _userRepository = userRepository;
+    }
+
 
     public bool RegisterUser(HttpRequest request)
     {

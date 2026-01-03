@@ -14,6 +14,10 @@ public class Router
         {
             return usersController.Handle(request);
         }
+        if (request.Path.StartsWith("/media"))
+        {
+            return mediaController.Handle(request);
+        }
         
         else
         {

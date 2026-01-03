@@ -82,7 +82,7 @@ public class UserRepository: IUserRepository
         using var cmd = new NpgsqlCommand("UPDATE myusers SET token = @t WHERE username = @un", conn);
         cmd.Parameters.AddWithValue("@t", token);
         cmd.Parameters.AddWithValue("@un", username); 
-        cmd.ExecuteNonQueryAsync();
+        cmd.ExecuteNonQuery();
         return true;
     }
     private static bool VerifyPassword(string password, string storedHash)

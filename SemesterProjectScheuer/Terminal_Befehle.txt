@@ -1,4 +1,3 @@
-docker compose up -d
 
 github link:
 https://github.com/petra-scheuer/SemesterProjectScheuer/tree/main/SemesterProjectScheuer
@@ -7,3 +6,25 @@ https://github.com/petra-scheuer/SemesterProjectScheuer/tree/main/SemesterProjec
 curl script:
 chmod curl_script.sh                                                                 
 ./curl_script.sh
+
+
+curl -v POST http://localhost:10001/users/register \
+  -H "Content-Type: application/json" \
+  -d '{"username":"petra_test","password":"1234"}'   
+  
+curl -v http://localhost:10001/users/login \           
+  -H "Content-Type: application/json" \
+  -d '{"Username":"petra_test","Password":"1234"}'
+  
+  
+curl -v http://localhost:10001/media/register \
+    -H "Content-Type: application/json" \
+    -H "Authorization: Bearer petra_test-mrpToken-a2f47aed-fb98-44d7-9a3b-8b59670ae416" \
+    -d '{
+      "title": "Interstellar",
+      "description": "Manual curl test",
+      "mediaType": "Movie",
+      "releaseYear": 2014,
+      "genres": ["Sci-Fi"],
+      "ageRestriction": 16
+    }'
