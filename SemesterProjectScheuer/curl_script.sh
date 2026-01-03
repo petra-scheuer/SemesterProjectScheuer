@@ -40,6 +40,30 @@ curl -s -X GET "$BASE_URL/media/1" \
   -H "Authorization: Bearer $TOKEN" \
   -d '{"MediaId": 1}' -v
   
+echo
+echo "== Test /rate/media (ADD rating to media) =="
+curl -X POST "$BASE_URL/rate/media/" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $TOKEN" \
+  -d '{
+    "mediaId": 1,
+    "stars": 5,
+    "comment": "Sehr guter Film!"
+  }' \
+  -v
+
+echo
+echo "== Add second rating (same media) =="
+curl -X POST "$BASE_URL/rate/media/" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $TOKEN" \
+  -d '{
+    "mediaId": 1,
+    "stars": 4,
+    "comment": "Gute Story, etwas lang."
+  }' \
+  -v
+  
 echo "== Test /media/all (GET all media) =="
 curl -s -X GET "$BASE_URL/media/all" \
     -H "Content-Type: application/json" \

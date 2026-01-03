@@ -48,8 +48,24 @@ public class DatabaseManager
             age_restriction INT NOT NULL
       
         )
+   
 
     ";
+        const string createRatingsTable = @"
+        CREATE TABLE IF NOT EXISTS rating (
+            id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+            created_at Timestamp without time zone NOT NULL,
+            media_id INT NOT NULL,
+            user_id INT NOT NULL,
+            stars INT NOT NULL,
+            comment VARCHAR(255) NOT NULL,
+            is_confirmed BOOLEAN NOT NULL,
+            likes INT NOT NULL DEFAULT 0
+            
+       
+            
+        )    ";
+        
         
         NpgsqlConnection conn = GetConnection();
         
@@ -58,8 +74,9 @@ public class DatabaseManager
         
         using var mediacmd = new NpgsqlCommand(createMediasTable, conn);
         mediacmd.ExecuteNonQuery();
+        using var ratingscmd = new NpgsqlCommand(createRatingsTable, conn);
+        ratingscmd.ExecuteNonQuery();
         conn.Close();
-        
     }
 
     public static NpgsqlConnection GetConnection()
@@ -75,6 +92,7 @@ public class DatabaseManager
         const string dropUsersTable = @"
         Drop TABLE myusers;
         DROP TABLE media;
+        DROP TABLE rating;
     ";
         
         using var cmd = new NpgsqlCommand(dropUsersTable, conn);

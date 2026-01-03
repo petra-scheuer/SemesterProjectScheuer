@@ -130,7 +130,7 @@ public class MediaRepository: IMediaRepository
         return new MediaElement
         {
             MediaId = reader.GetInt32(reader.GetOrdinal("id")),
-            created_at = reader.GetDateTime(reader.GetOrdinal("created_at")),
+            CreatedAt = reader.GetDateTime(reader.GetOrdinal("created_at")),
             Title = reader.GetString(reader.GetOrdinal("title")),
             Description = reader.GetString(reader.GetOrdinal("description")),
             MediaType = reader.GetString(reader.GetOrdinal("media_type")),

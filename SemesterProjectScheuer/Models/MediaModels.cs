@@ -18,7 +18,7 @@ public class RegisterMedia
 public class MediaElement
 {
     public int MediaId { get; set; }
-    public DateTime created_at { get; set; }
+    public DateTime CreatedAt { get; set; }
     public string? Title { get; set; }
     public string? Description { get; set; }
     public string? MediaType { get; set; }   // e.g. "movie", "series"

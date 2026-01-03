@@ -18,6 +18,10 @@ public class Router
         {
             return mediaController.Handle(request);
         }
+        if (request.Path.StartsWith("/rate/"))
+        {
+            return ratingsController.Handle(request);
+        }
         
         else
         {

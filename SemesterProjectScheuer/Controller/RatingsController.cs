@@ -1,14 +1,30 @@
+using SemesterProjectScheuer.Repository;
+using SemesterProjectScheuer.Services;
+
 namespace SemesterProjectScheuer.Controller;
 
 public class RatingsController
 {
+    private RatingsService _ratingsService = new RatingsService(new RatingsRepository());
+
     public HttpResponse Handle(HttpRequest request)
     {
         string path = request.Path;
         if (path == "/")
             return new HttpResponse() { StatusCode = 404 };
-        if (path == "/ratings/media/{id}/rate" && request.Method == "POST")
+        if (path == "/rate/media/" && request.Method == "POST")
         { 
+            bool success = _ratingsService.RegisterRating(request);
+
+            if (success)
+            {
+                return new HttpResponse
+                {
+                    StatusCode = 200,
+                    ContentType = "text/plain",
+                    Body = "Rating successful."
+                };
+            }
             return new HttpResponse
             {
                 StatusCode = 404,
@@ -26,7 +42,7 @@ public class RatingsController
             };
         }
         
-        if (path == "/media/{media_id}" && request.Method == "GET")
+        if (path == "/ratings/" && request.Method == "GET")
         {
             return new HttpResponse
             {
@@ -35,7 +51,7 @@ public class RatingsController
                 Body = "Not yet implemented."
             };
         }
-        if (path == "/media/{media_id}" && request.Method == "DELETE")
+        if (path == "/ratings/" && request.Method == "DELETE")
         {
             return new HttpResponse
             {
