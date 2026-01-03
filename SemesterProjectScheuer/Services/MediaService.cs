@@ -21,6 +21,7 @@ public class MediaService
         if(registerUserDto == null)
         {
             throw new Exception("Deserialisierung fehlgeschlagen");
+            return false;
         }
         bool registrationSuccessful = _mediaRepository.CreateMedia(registerUserDto);
         return registrationSuccessful;
