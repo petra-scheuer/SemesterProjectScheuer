@@ -16,7 +16,7 @@ public class Router
             return usersController.Handle(request);
         }
         
-        var currentActiveUser = usersController.getCurrentActiveUser(request);
+        CurrentActiveUser currentActiveUser = usersController.getCurrentActiveUser(request);
         Console.WriteLine(currentActiveUser);
         if (currentActiveUser == null)
         {
@@ -34,7 +34,7 @@ public class Router
         }
         if (request.Path.StartsWith("/rate/"))
         {
-            return ratingsController.Handle(request);
+            return ratingsController.Handle(request, currentActiveUser);
         }
         
         else

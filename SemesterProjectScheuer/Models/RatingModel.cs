@@ -10,6 +10,28 @@ public class RatingModel
     public bool IsCommentConfirmed { get; set; }
     public DateTime CreatedAt { get; set; }
 }
+public class RatingObject
+{
+    public int RatingId { get; set; }
+    public int MediaId { get; set; }
+    public int UserId { get; set; }
+    public int Stars { get; set; }          // 1–5
+    public string? Comment { get; set; }
+    public bool IsCommentConfirmed { get; set; }
+    public DateTime CreatedAt { get; set; }
+}
+
+public class ChangeRating
+{
+    public int RatingId { get; set; }
+    public int MediaId { get; set; }
+    public int UserId { get; set; }
+    public int Stars { get; set; }
+    public string? Comment { get; set; }
+    public bool IsCommentConfirmed { get; set; }
+}
+
+
 
 public class RegisterRating
 {

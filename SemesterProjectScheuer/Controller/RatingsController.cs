@@ -1,3 +1,5 @@
+using Newtonsoft.Json;
+using SemesterProjectScheuer.Models;
 using SemesterProjectScheuer.Repository;
 using SemesterProjectScheuer.Services;
 
@@ -7,14 +9,14 @@ public class RatingsController
 {
     private RatingsService _ratingsService = new RatingsService(new RatingsRepository());
 
-    public HttpResponse Handle(HttpRequest request)
+    public HttpResponse Handle(HttpRequest request, CurrentActiveUser currentActiveUser)
     {
         string path = request.Path;
         if (path == "/")
             return new HttpResponse() { StatusCode = 404 };
         if (path == "/rate/media/" && request.Method == "POST")
         { 
-            bool success = _ratingsService.RegisterRating(request);
+            bool success = _ratingsService.RegisterRating(request, currentActiveUser);
 
             if (success)
             {
@@ -22,15 +24,9 @@ public class RatingsController
                 {
                     StatusCode = 200,
                     ContentType = "text/plain",
-                    Body = "Rating successful."
+                    Body = "Rating erfolgreich erstellt."
                 };
             }
-            return new HttpResponse
-            {
-                StatusCode = 404,
-                ContentType = "text/plain",
-                Body = "Not yet implemented."
-            };
         }
         if (path == "/ratings/{id}/like" && request.Method == "POST")
         { 
@@ -41,7 +37,6 @@ public class RatingsController
                 Body = "Not yet implemented."
             };
         }
-        
         if (path == "/ratings/" && request.Method == "GET")
         {
             return new HttpResponse
@@ -60,13 +55,22 @@ public class RatingsController
                 Body = "Not yet implemented."
             };
         }
-        if (path == "/ratings/{id}" && request.Method == "PUT")
+        if (path == "/rate/" && request.Method == "PUT")
         {
+            var updatedRating = _ratingsService.ChangeRating(request, currentActiveUser);
+            if (updatedRating == null)
+            {
+                return new HttpResponse{
+                    StatusCode = 400,
+                    ContentType = "text/plain",
+                    Body = "Ein Fehler ist aufgetreten."
+                };
+            }
             return new HttpResponse
             {
-                StatusCode = 404,
+                StatusCode = 200,
                 ContentType = "text/plain",
-                Body = "Not yet implemented."
+                Body = JsonConvert.SerializeObject(updatedRating)
             };
         }
         {

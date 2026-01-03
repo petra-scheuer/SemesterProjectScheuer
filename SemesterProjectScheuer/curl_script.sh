@@ -64,6 +64,23 @@ curl -X POST "$BASE_URL/rate/media/" \
   }' \
   -v
   
+echo
+echo "== Test /rate (PUT change rating) =="
+
+RATING_ID=1  
+
+curl -X PUT "$BASE_URL/rate/" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $TOKEN" \
+  -d "{
+    \"ratingId\": $RATING_ID,
+    \"mediaId\": 1,
+    \"stars\": 3,
+    \"comment\": \"Update: nach erneutem Schauen nur 3 Sterne.\",
+    \"isCommentConfirmed\": false
+  }" \
+  -v
+  
 echo "== Test /media/all (GET all media) =="
 curl -s -X GET "$BASE_URL/media/all" \
     -H "Content-Type: application/json" \
