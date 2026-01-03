@@ -32,14 +32,14 @@ public class UserRepository: IUserRepository
             return false;
         }
     }
-    private static string MyHash(string text)
+    public string MyHash(string text)
     {
         using var sha = SHA256.Create();
         var bytes = sha.ComputeHash(Encoding.UTF8.GetBytes(text));
         return Convert.ToBase64String(bytes);
     }
     
-    public static UserModel? AuthenticateUser(string username, string password)
+    public  UserModel? AuthenticateUser(string username, string password)
     {
         using var conn = DatabaseManager.GetConnection();
         using var cmd = new NpgsqlCommand("SELECT username, password FROM myusers WHERE username = @u", conn);
@@ -60,23 +60,27 @@ public class UserRepository: IUserRepository
 
         return null;
     }
-    public static UserModel GetUserByToken(string token)
+    public  CurrentActiveUser GetUserByToken(string token)
     {
         using var conn = DatabaseManager.GetConnection();
-        using var cmd = new NpgsqlCommand("SELECT username FROM myusers WHERE token = @t", conn);
+        using var cmd = new NpgsqlCommand("SELECT id, username, token, created_at FROM myusers WHERE token = @t", conn);
         cmd.Parameters.AddWithValue("@t", token);
         using var reader = cmd.ExecuteReader();
 
         if ( reader.Read())
         {
-            return new UserModel
+            return new CurrentActiveUser
             {
-                username = reader.GetString(0)
+                userId = reader.GetInt32(0),
+                username = reader.GetString(1),
+                token = reader.GetString(2),
+                createdAt = reader.GetDateTime(3)
+                
             };
         }
         return null;
     }
-    public static bool SaveToken(string username, string token)
+    public  bool SaveToken(string username, string token)
     {
         using var conn = DatabaseManager.GetConnection();
         using var cmd = new NpgsqlCommand("UPDATE myusers SET token = @t WHERE username = @un", conn);
@@ -85,7 +89,7 @@ public class UserRepository: IUserRepository
         cmd.ExecuteNonQuery();
         return true;
     }
-    private static bool VerifyPassword(string password, string storedHash)
+    private bool VerifyPassword(string password, string storedHash)
     {
         // wenn du SHA256 nutzt
         using var sha = SHA256.Create();

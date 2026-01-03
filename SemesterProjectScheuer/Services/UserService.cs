@@ -42,7 +42,7 @@ public class UserService
         {
             throw new Exception("Deserialisierung fehlgeschlagen");
         }
-        UserModel user = UserRepository.AuthenticateUser(loginUserDto.username, loginUserDto.password);
+        UserModel user = _userRepository.AuthenticateUser(loginUserDto.username, loginUserDto.password);
         if (user == null)
         {
             throw new Exception("Authentifizierung fehlgeschlagen");
@@ -51,7 +51,7 @@ public class UserService
 
         // Token generieren: "username-mrpToken" oder GUID-basierend
         string token = $"{user.username}-mrpToken-{Guid.NewGuid()}";
-        bool success = UserRepository.SaveToken(user.username, token);
+        bool success = _userRepository.SaveToken(user.username, token);
         if (success is true)
         {
             return token;
@@ -62,10 +62,10 @@ public class UserService
             throw new Exception("Token nicht gespreichert");
         }
     }
-    public UserModel ValidateTokenAsync(string token)
+    public CurrentActiveUser ValidateTokenAsync(string token)
     {
         if (string.IsNullOrEmpty(token)) return null;
-        return UserRepository.GetUserByToken(token);
+        return _userRepository.GetUserByToken(token);
     }
     
 }

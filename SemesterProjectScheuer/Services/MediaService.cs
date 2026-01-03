@@ -18,6 +18,9 @@ public class MediaService
     {
         string jsonBody = request.Body;
 
+        
+        
+
         var registerMediaDto = JsonConvert.DeserializeObject<RegisterMedia>(jsonBody);
         if (registerMediaDto == null)
         {

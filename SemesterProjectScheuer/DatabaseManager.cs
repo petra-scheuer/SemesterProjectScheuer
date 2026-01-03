@@ -29,7 +29,8 @@ public class DatabaseManager
 
         const string createUsersTable = @"
         CREATE TABLE IF NOT EXISTS myusers (
-            username VARCHAR(50) PRIMARY KEY,
+            id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+            username VARCHAR(50),
             password VARCHAR(255) NOT NULL,
             token VARCHAR(255),
             created_at Timestamp without time zone NOT NULL

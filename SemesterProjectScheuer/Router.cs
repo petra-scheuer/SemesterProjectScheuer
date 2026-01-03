@@ -1,4 +1,5 @@
 using SemesterProjectScheuer.Controller;
+using SemesterProjectScheuer.Models;
 
 namespace SemesterProjectScheuer;
 
@@ -14,6 +15,19 @@ public class Router
         {
             return usersController.Handle(request);
         }
+        
+        var currentActiveUser = usersController.getCurrentActiveUser(request);
+        Console.WriteLine(currentActiveUser);
+        if (currentActiveUser == null)
+        {
+            return new HttpResponse
+            {
+                StatusCode = 401,
+                ContentType = "text/plain",
+                Body = "Unauthorized"
+            };
+        }
+        
         if (request.Path.StartsWith("/media"))
         {
             return mediaController.Handle(request);

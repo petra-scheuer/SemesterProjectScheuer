@@ -6,9 +6,11 @@ namespace SemesterProjectScheuer.IRepositories;
 public interface IUserRepository
 {
     bool CreateUser(RegisterUser newUser);
-    //bool AuthUser(string username, string password);
-    //bool UpdateToken(string username, string token);
-    //bool ChangeUsername(string oldUsername, string newUsername);
-    //bool AuthByUsernameAndToken(string username, string token);
+    CurrentActiveUser GetUserByToken(string token);
 
+    string MyHash(string text);
+
+    UserModel? AuthenticateUser(string username, string password);
+    bool SaveToken(string username, string token);
+    
 }

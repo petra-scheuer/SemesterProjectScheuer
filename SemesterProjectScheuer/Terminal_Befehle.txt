@@ -28,6 +28,17 @@ curl -v http://localhost:10001/media/register \
       "genres": ["Sci-Fi"],
       "ageRestriction": 16
     }'
+###NO TOKEN FOR TEST FOR CURRENT ACTIVE USER ###
+curl -v http://localhost:10001/media/register \
+    -H "Content-Type: application/json" \
+    -d '{
+      "title": "Interstellar",
+      "description": "Manual curl test",
+      "mediaType": "Movie",
+      "releaseYear": 2014,
+      "genres": ["Sci-Fi"],
+      "ageRestriction": 16
+    }'
     
 curl -v http://localhost:10001/media/1 \
   -X GET \
