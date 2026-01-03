@@ -7,5 +7,6 @@ public interface IMediaRepository
     MediaElement GetMediaById(int mediaId);
 
     List<MediaElement> GetAllMedias();
-    //bool UpdateMedia(RegisterMedia updatedMedia);
+    bool DeleteMediaById(int mediaId);
+    MediaElement ChangeMedia(ChangeMedia updatedMedia);
 }

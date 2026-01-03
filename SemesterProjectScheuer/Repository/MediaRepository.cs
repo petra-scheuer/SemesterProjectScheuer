@@ -86,4 +86,57 @@ public class MediaRepository: IMediaRepository
 
         return medias;
     }
+
+    public bool DeleteMediaById(int mediaId)
+    {
+        const string sql = "DELETE FROM media WHERE id = @id";
+        using var conn = DatabaseManager.GetConnection();
+        using var cmd = new NpgsqlCommand(sql, conn);
+        cmd.Parameters.AddWithValue("@id", mediaId);
+        return cmd.ExecuteNonQuery() == 1;
+        
+    }
+    public MediaElement ChangeMedia(ChangeMedia updatedMedia)
+    {
+        const string sql = @"
+        UPDATE media
+        SET
+            title = @t,
+            description = @d,
+            media_type = @x,
+            release_year = @y,
+            genres = @g,
+            age_restriction = @a
+        WHERE id = @id
+        RETURNING id, created_at, title, description, media_type, release_year, genres, age_restriction;
+    ";
+
+        using var conn = DatabaseManager.GetConnection();
+        using var cmd = new NpgsqlCommand(sql, conn);
+
+        cmd.Parameters.AddWithValue("id", updatedMedia.MediaId);
+        cmd.Parameters.AddWithValue("t", updatedMedia.Title);
+        cmd.Parameters.AddWithValue("d", updatedMedia.Description);
+        cmd.Parameters.AddWithValue("x", updatedMedia.MediaType);
+        cmd.Parameters.AddWithValue("y", updatedMedia.ReleaseYear);
+        cmd.Parameters.AddWithValue("g", updatedMedia.Genres);
+        cmd.Parameters.AddWithValue("a", updatedMedia.AgeRestriction);
+
+        using var reader = cmd.ExecuteReader();
+
+        if (!reader.Read())
+            throw new Exception($"Media with id {updatedMedia.MediaId} not found.");
+
+        return new MediaElement
+        {
+            MediaId = reader.GetInt32(reader.GetOrdinal("id")),
+            created_at = reader.GetDateTime(reader.GetOrdinal("created_at")),
+            Title = reader.GetString(reader.GetOrdinal("title")),
+            Description = reader.GetString(reader.GetOrdinal("description")),
+            MediaType = reader.GetString(reader.GetOrdinal("media_type")),
+            ReleaseYear = reader.GetInt32(reader.GetOrdinal("release_year")),
+            Genres = reader.GetString(reader.GetOrdinal("genres")),
+            AgeRestriction = reader.GetInt32(reader.GetOrdinal("age_restriction")),
+        };
+    }
 }
