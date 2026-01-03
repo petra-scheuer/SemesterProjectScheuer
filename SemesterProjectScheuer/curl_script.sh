@@ -20,14 +20,16 @@ echo "TOKEN=$TOKEN"
 
 echo
 echo "== Test /media (register media) =="
-curl -X POST "$BASE_URL/media" \
+curl -X POST "$BASE_URL/media/register" \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer $TOKEN" \
   -d '{
-    "title": "Test Movie",
+    "title": "New test",
     "description": "Minimal curl test",
     "mediaType": "Movie",
-    "releaseYear": 2024
+    "releaseYear": 2024,
+    "genres": ["Sci-Fi"],
+    "ageRestriction": 16
   }' \
   -v
 
