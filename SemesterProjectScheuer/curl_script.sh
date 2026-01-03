@@ -32,4 +32,17 @@ curl -X POST "$BASE_URL/media/register" \
     "ageRestriction": 16
   }' \
   -v
+echo
+echo "== Test /media/{id} (GET media by ID) =="
 
+curl -s -X GET "$BASE_URL/media/1" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $TOKEN" \
+  -d '{"MediaId": 1}' -v
+  
+echo "== Test /media/all (GET all media) =="
+curl -s -X GET "$BASE_URL/media/all" \
+    -H "Content-Type: application/json" \
+    -H "Authorization: Bearer $TOKEN" 
+    
+  

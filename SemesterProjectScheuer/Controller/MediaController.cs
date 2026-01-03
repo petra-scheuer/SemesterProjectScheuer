@@ -1,3 +1,6 @@
+using Newtonsoft.Json;
+using SemesterProjectScheuer.Models;
+
 namespace SemesterProjectScheuer.Controller;
 using SemesterProjectScheuer.Repository;
 using SemesterProjectScheuer.Services;
@@ -32,15 +35,60 @@ public class MediaController
                 };
             }
         }
-
-
-        if (path == "/media/{media_id}" && request.Method == "GET")
+                
+        if (request.Method == "GET" && path.StartsWith("/media/all"))
         {
+            try
+            {
+                List<MediaElement> medias = _mediaService.GetAllMedia();
+
+                if (medias == null || medias.Count == 0)
+                {
+                    return new HttpResponse
+                    {
+                        StatusCode = 404,
+                        ContentType = "text/plain",
+                        Body = "No medias found!"
+                    };
+                }
+
+                return new HttpResponse
+                {
+                    StatusCode = 200,
+                    ContentType = "application/json",
+                    Body = JsonConvert.SerializeObject(medias)
+                };
+            }
+            catch (Exception)
+            {
+                return new HttpResponse
+                {
+                    StatusCode = 500,
+                    ContentType = "text/plain",
+                    Body = "Internal server error"
+                };
+            }
+        }
+        
+        if (request.Method == "GET" && path.StartsWith("/media/"))
+        {
+            MediaElement media = _mediaService.GetMediaById(request);
+
+            if (media == null)
+            {
+                return new HttpResponse
+                {
+                    StatusCode = 404,
+                    ContentType = "text/plain",
+                    Body = "Media not found!"
+                };
+            }
+
             return new HttpResponse
             {
-                StatusCode = 404,
-                ContentType = "text/plain",
-                Body = "Not yet implemented."
+                StatusCode = 200,
+                ContentType = "application/json",
+                Body = JsonConvert.SerializeObject(media)
             };
         }
         if (path == "/media/{media_id}" && request.Method == "DELETE")

@@ -34,5 +34,56 @@ public class MediaRepository: IMediaRepository
             return false;
         }
     }
-    
+
+    public MediaElement GetMediaById(int mediaId)
+    {
+        const string sql = "SELECT * FROM media WHERE id = @id";
+
+        using var conn = DatabaseManager.GetConnection();
+
+        using var cmd = new NpgsqlCommand(sql, conn);
+        cmd.Parameters.AddWithValue("@id", mediaId);
+
+        using var reader = cmd.ExecuteReader();
+
+        if (!reader.Read())
+            return null;
+
+        return new MediaElement
+        {
+            MediaId = reader.GetInt32(0),
+            Title = reader.GetString(2),
+            Description = reader.GetString(3),
+            MediaType = reader.GetString(4),
+            ReleaseYear = reader.GetInt32(5),
+            Genres = reader.GetString(6),
+            AgeRestriction = reader.GetInt32(7)
+        };
+    }
+    public List<MediaElement> GetAllMedias()
+    {
+        const string sql = "SELECT * FROM media ORDER BY created_at";
+
+        using var conn = DatabaseManager.GetConnection();
+        using var cmd = new NpgsqlCommand(sql, conn);
+        using var reader = cmd.ExecuteReader();
+
+        var medias = new List<MediaElement>();
+
+        while (reader.Read())
+        {
+            medias.Add(new MediaElement
+            {
+                MediaId = reader.GetInt32(0),
+                Title = reader.GetString(2),
+                Description = reader.GetString(3),
+                MediaType = reader.GetString(4),
+                ReleaseYear = reader.GetInt32(5),
+                Genres = reader.GetString(6),
+                AgeRestriction = reader.GetInt32(7)
+            });
+        }
+
+        return medias;
+    }
 }

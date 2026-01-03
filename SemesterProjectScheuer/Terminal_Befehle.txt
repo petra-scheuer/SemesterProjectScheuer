@@ -28,3 +28,11 @@ curl -v http://localhost:10001/media/register \
       "genres": ["Sci-Fi"],
       "ageRestriction": 16
     }'
+    
+curl -v http://localhost:10001/media/1 \
+  -X GET \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer petra_test-mrpToken-a2f47aed-fb98-44d7-9a3b-8b59670ae416" \
+  -d '{
+    "media_id": 1
+  }'

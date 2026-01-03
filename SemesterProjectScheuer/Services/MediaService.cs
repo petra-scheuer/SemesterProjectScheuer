@@ -28,5 +28,30 @@ public class MediaService
         
     }
 
+    public MediaElement GetMediaById(HttpRequest request)
+    {
+        var dto = JsonConvert.DeserializeObject<GetMediaRequest>(request.Body);
+
+        if (dto == null)
+        {
+            throw new Exception("Deserialisierung fehlgeschlagen");
+        }
+
+        MediaElement media = _mediaRepository.GetMediaById(dto.MediaId);
+
+        if (media == null)
+        {
+            throw new Exception("Media nicht gefunden");
+        }
+
+        return media;
+    }
+
+    public List<MediaElement> GetAllMedia()
+    {
+        List < MediaElement> medias = _mediaRepository.GetAllMedias();
+        return medias;
+    }
     
 }
+
