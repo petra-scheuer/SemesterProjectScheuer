@@ -51,5 +51,38 @@ public class RatingsService
         RatingObject updatedRating = _ratingsRepository.ChangeRating(changeRatingDto);
         return updatedRating;
     }
-    
+
+    public bool DeleteRating(HttpRequest request, CurrentActiveUser currentActiveUser)
+    {
+        string jsonBody = request.Body;
+
+        var deleteRatingDto = JsonConvert.DeserializeObject<ChooseRating>(jsonBody);
+        if (deleteRatingDto == null)
+            throw new Exception("Deserialisierung fehlgeschlagen");
+
+        RatingObject oldRatingObject = _ratingsRepository.GetRating(deleteRatingDto.RatingId);
+        
+        if (oldRatingObject.UserId != currentActiveUser.userId)
+            return false;
+        
+        deleteRatingDto.UserId = currentActiveUser.userId;
+
+        bool deleted = _ratingsRepository.DeleteRating(deleteRatingDto);
+        return deleted;
+    }
+
+    public bool LikeRateing(HttpRequest request, CurrentActiveUser currentActiveUser)
+    {
+        string jsonBody = request.Body;
+
+        var likeRatingDto = JsonConvert.DeserializeObject<ChooseRating>(jsonBody);
+        if (likeRatingDto == null)
+            throw new Exception("Deserialisierung fehlgeschlagen");
+        
+        likeRatingDto.UserId = currentActiveUser.userId;
+        
+        bool liked = _ratingsRepository.LikeRating(likeRatingDto);
+        return liked;
+        
+    }
 }

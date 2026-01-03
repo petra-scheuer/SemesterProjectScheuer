@@ -80,6 +80,15 @@ curl -X PUT "$BASE_URL/rate/" \
     \"isCommentConfirmed\": false
   }" \
   -v
+
+LIKE_BODY="{\"ratingId\": $RATING_ID}"
+
+echo "-- Try POST /rate/like"
+curl -X POST "$BASE_URL/rate/like" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $TOKEN" \
+  -d "$LIKE_BODY" \
+  -v
   
 echo "== Test /media/all (GET all media) =="
 curl -s -X GET "$BASE_URL/media/all" \

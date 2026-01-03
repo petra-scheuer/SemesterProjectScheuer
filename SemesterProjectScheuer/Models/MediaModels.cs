@@ -26,6 +26,10 @@ public class MediaElement
     public string Genres { get; set; }
     public int? AgeRestriction { get; set; }
     
+    public List<RatingObject>? Ratings { get; set; }
+    
+    public double? AverageScore { get; set; } 
+    
 }
 
 public class ChangeMedia

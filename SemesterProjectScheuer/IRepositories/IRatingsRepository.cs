@@ -10,4 +10,8 @@ public interface IRatingsRepository
     
     RatingObject GetRating(int ratingId);
 
+    bool DeleteRating(ChooseRating deleteRatingDto);
+    
+    bool LikeRating(ChooseRating likeRatingDto);
+
 }

@@ -40,6 +40,12 @@ public class MediaService
         }
 
         MediaElement media = _mediaRepository.GetMediaById(dto.MediaId);
+        
+        media.Ratings = _mediaRepository.GetRatingsOfMedia(dto.MediaId);
+        
+        media.AverageScore = media.Ratings.Any()
+            ? media.Ratings.Average(r => r.Stars)
+            : 0;
 
         if (media == null)
         {
@@ -90,7 +96,14 @@ public class MediaService
     {
         // 1. Alle Medien holen
         var media = _mediaRepository.GetAllMedias();
+        foreach (var m in media)
+        {
+            m.Ratings = _mediaRepository.GetRatingsOfMedia(m.MediaId);
 
+            m.AverageScore = m.Ratings.Any()
+                ? m.Ratings.Average(r => r.Stars)
+                : 0;
+        }
         // 2. Nach Titel filtern
         if (title != null)
         {

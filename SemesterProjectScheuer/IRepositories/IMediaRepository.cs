@@ -8,4 +8,6 @@ public interface IMediaRepository
     List<MediaElement> GetAllMedias();
     bool DeleteMediaById(int mediaId);
     MediaElement ChangeMedia(ChangeMedia updatedMedia);
+    
+    List<RatingObject> GetRatingsOfMedia(int mediaId);
 }

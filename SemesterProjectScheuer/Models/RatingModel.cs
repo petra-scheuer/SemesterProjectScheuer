@@ -31,7 +31,12 @@ public class ChangeRating
     public bool IsCommentConfirmed { get; set; }
 }
 
-
+public class ChooseRating
+{
+    public int RatingId { get; set; }
+    public int MediaId { get; set; }
+    public int UserId { get; set; }
+}
 
 public class RegisterRating
 {

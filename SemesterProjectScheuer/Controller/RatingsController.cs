@@ -28,8 +28,19 @@ public class RatingsController
                 };
             }
         }
-        if (path == "/ratings/{id}/like" && request.Method == "POST")
-        { 
+        if (path == "/rate/like" && request.Method == "POST")
+        {
+            bool success = _ratingsService.LikeRateing(request, currentActiveUser);
+            if (success)
+            {
+                return new HttpResponse
+                {
+                    StatusCode = 200,
+                    ContentType = "text/plain",
+                    Body = "Rating erfolgreich geliked."
+                };
+                
+            }
             return new HttpResponse
             {
                 StatusCode = 404,
@@ -46,14 +57,19 @@ public class RatingsController
                 Body = "Not yet implemented."
             };
         }
-        if (path == "/ratings/" && request.Method == "DELETE")
+        if (path == "/rate/" && request.Method == "DELETE")
         {
-            return new HttpResponse
+            bool success = _ratingsService.DeleteRating(request, currentActiveUser);
+
+            if (success)
             {
-                StatusCode = 404,
-                ContentType = "text/plain",
-                Body = "Not yet implemented."
-            };
+                return new HttpResponse
+                {
+                    StatusCode = 200,
+                    ContentType = "text/plain",
+                    Body = "Rating erfolgreich gelöscht."
+                };
+            }
         }
         if (path == "/rate/" && request.Method == "PUT")
         {

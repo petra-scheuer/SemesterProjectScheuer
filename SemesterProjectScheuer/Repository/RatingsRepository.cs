@@ -115,5 +115,32 @@ public class RatingsRepository: IRatingsRepository
         
     }
 
+    public bool DeleteRating(ChooseRating deleteRatingDto)
+    {
+        const string sql = @"DELETE FROM rating WHERE id = @id";
+
+        using var conn = DatabaseManager.GetConnection();
+        using var cmd = new NpgsqlCommand(sql, conn);
+        cmd.Parameters.AddWithValue("@id", deleteRatingDto.RatingId);
+
+        int rowsAffected = cmd.ExecuteNonQuery();
+        return rowsAffected == 1;
+    }
+
+    public bool LikeRating(ChooseRating likeRatingDto)
+    {
+        const string sql = @"
+        UPDATE rating
+        SET likes = likes + 1
+        WHERE id = @id
+    ";
+
+        using var conn = DatabaseManager.GetConnection();
+        using var cmd = new NpgsqlCommand(sql, conn);
+        cmd.Parameters.AddWithValue("@id", likeRatingDto.RatingId);
+
+        int rowsAffected = cmd.ExecuteNonQuery();
+        return rowsAffected == 1;
+    }
 
 }

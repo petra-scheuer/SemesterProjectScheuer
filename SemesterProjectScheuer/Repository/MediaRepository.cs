@@ -139,4 +139,48 @@ public class MediaRepository: IMediaRepository
             AgeRestriction = reader.GetInt32(reader.GetOrdinal("age_restriction")),
         };
     }
+
+    public List<RatingObject> GetRatingsOfMedia(int mediaId)
+    {
+        const string sql = @"
+        SELECT 
+            id as rating_id,
+            media_id,
+            user_id,
+            stars,
+            comment,
+            is_confirmed as is_comment_confirmed,
+            created_at
+        FROM rating
+        WHERE media_id = @id
+        ORDER BY created_at DESC
+    ";
+
+        using var conn = DatabaseManager.GetConnection();
+        using var cmd = new NpgsqlCommand(sql, conn);
+        cmd.Parameters.AddWithValue("@id", mediaId);
+
+        using var reader = cmd.ExecuteReader();
+
+        var ratings = new List<RatingObject>();
+
+        while (reader.Read())
+        {
+            ratings.Add(new RatingObject
+            {
+                RatingId = reader.GetInt32(reader.GetOrdinal("rating_id")),
+                MediaId = reader.GetInt32(reader.GetOrdinal("media_id")),
+                UserId = reader.GetInt32(reader.GetOrdinal("user_id")),
+                Stars = reader.GetInt32(reader.GetOrdinal("stars")),
+                Comment = reader.IsDBNull(reader.GetOrdinal("comment"))
+                    ? null
+                    : reader.GetString(reader.GetOrdinal("comment")),
+                IsCommentConfirmed = reader.GetBoolean(reader.GetOrdinal("is_comment_confirmed")),
+                CreatedAt = reader.GetDateTime(reader.GetOrdinal("created_at"))
+            });
+        }
+
+        return ratings;
+    }
+
 }
