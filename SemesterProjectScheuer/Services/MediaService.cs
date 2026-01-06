@@ -98,7 +98,7 @@ public class MediaService
         var media = _mediaRepository.GetAllMedias();
         foreach (var m in media)
         {
-            m.Ratings = _mediaRepository.GetRatingsOfMedia(m.MediaId);
+            m.Ratings = _mediaRepository.GetRatingsOfMedia(m.MediaId) ?? new List<RatingObject>();
 
             m.AverageScore = m.Ratings.Any()
                 ? m.Ratings.Average(r => r.Stars)

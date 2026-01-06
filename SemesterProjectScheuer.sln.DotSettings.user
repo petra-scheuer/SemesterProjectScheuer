@@ -1,7 +1,16 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AArgumentNullException_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003FLibrary_003FApplication_0020Support_003FJetBrains_003FRider2024_002E3_003Fresharper_002Dhost_003FSourcesCache_003F473d97221b573ab97e6e745d8adae8b9e95a666539d6ed3cc8566b245d93a_003FArgumentNullException_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AStreamReader_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003FLibrary_003FApplication_0020Support_003FJetBrains_003FRider2024_002E3_003Fresharper_002Dhost_003FDecompilerCache_003Fdecompiler_003F6d2342c247c64eb7a9b3702e481e4443f83e00_003Fb5_003F906816a4_003FStreamReader_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AString_002EComparison_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003FLibrary_003FApplication_0020Support_003FJetBrains_003FRider2024_002E3_003Fresharper_002Dhost_003FSourcesCache_003Ff71b67a2195f9edac51c3c82e40fccd25f957ac185e7c8a684189f8b5c1e387_003FString_002EComparison_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AThrowHelper_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003FLibrary_003FApplication_0020Support_003FJetBrains_003FRider2024_002E3_003Fresharper_002Dhost_003FSourcesCache_003F8ac5aedc723ed18f28ffbaf70773f8f96a7ef997d74e4753bfc4366cf8f2179_003FThrowHelper_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/Environment/Highlighting/HighlightingSourceSnapshotLocation/@EntryValue">/Users/petrascheuer/Library/Caches/JetBrains/Rider2024.3/resharper-host/temp/Rider/vAny/CoverageData/_SemesterProjectScheuer.-1265217410/Snapshot/snapshot.utdcvr</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=b7f4d0e3_002D0882_002D4785_002D94ba_002Dae959f5d6983/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from MediaTest.cs" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;Or&gt;
+    &lt;ProjectFile&gt;01D551B9-23DB-454F-B0F1-5B13C39852F2/f:MediaTest.cs&lt;/ProjectFile&gt;
+    &lt;ProjectFile&gt;01D551B9-23DB-454F-B0F1-5B13C39852F2/f:UnitTest1.cs&lt;/ProjectFile&gt;
+    &lt;ProjectFile&gt;01D551B9-23DB-454F-B0F1-5B13C39852F2/f:RatingTest.cs&lt;/ProjectFile&gt;
+  &lt;/Or&gt;
+&lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=e66f0eda_002De484_002D4f88_002Dafda_002D2ad8e18e5f7a/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from UnitTest1.cs" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;Or&gt;
     &lt;ProjectFile&gt;01D551B9-23DB-454F-B0F1-5B13C39852F2/f:UnitTest1.cs&lt;/ProjectFile&gt;
@@ -9,6 +18,7 @@
       &lt;TestId&gt;NUnit3x::01D551B9-23DB-454F-B0F1-5B13C39852F2::net9.0::MyUnitTests.MediaTest.RegisterMedia_ValidJson_CallsCreateMediaAndReturnsTrue&lt;/TestId&gt;
       &lt;TestId&gt;NUnit3x::01D551B9-23DB-454F-B0F1-5B13C39852F2::net9.0::MyUnitTests.MediaTest.RegisterMedia_MalformedJson_ReturnsFalse_AndDoesNotCallRepository&lt;/TestId&gt;
       &lt;TestId&gt;NUnit3x::01D551B9-23DB-454F-B0F1-5B13C39852F2::net9.0::MyUnitTests.MediaServiceTests&lt;/TestId&gt;
+      &lt;TestId&gt;NUnit3x::01D551B9-23DB-454F-B0F1-5B13C39852F2::net9.0::MyUnitTests.RatingTest&lt;/TestId&gt;
     &lt;/TestAncestor&gt;
   &lt;/Or&gt;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

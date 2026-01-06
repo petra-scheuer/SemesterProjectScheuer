@@ -2,6 +2,7 @@ using System.Runtime.InteropServices.Swift;
 using Newtonsoft.Json;
 using SemesterProjectScheuer.IRepositories;
 using SemesterProjectScheuer.Models;
+using Exception = System.Exception;
 
 namespace SemesterProjectScheuer.Services;
 
@@ -54,6 +55,8 @@ public class RatingsService
 
     public bool DeleteRating(HttpRequest request, CurrentActiveUser currentActiveUser)
     {
+        if (currentActiveUser == null)
+            throw new UnauthorizedAccessException("Unauthorized");
         string jsonBody = request.Body;
 
         var deleteRatingDto = JsonConvert.DeserializeObject<ChooseRating>(jsonBody);
