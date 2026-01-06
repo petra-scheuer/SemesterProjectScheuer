@@ -340,4 +340,121 @@ public class MediaServiceTests
 
         repoMock.Verify(r => r.GetAllMedias(), Times.Once);
     }
+    [Test]
+public void DeleteMedia_ValidJson_CallsDeleteMediaById_AndReturnsTrue()
+{
+    // Vorbereitung
+    var request = new HttpRequest
+    {
+        Body = "{\"mediaId\": 7}"
+    };
+
+    var repoMock = new Mock<IMediaRepository>();
+    repoMock
+        .Setup(r => r.DeleteMediaById(7))
+        .Returns(true);
+
+    var service = new MediaService(repoMock.Object);
+
+    // Ausführen
+    var result = service.DeleteMediaById(request);
+
+    // Überprüfen
+    Assert.That(result, Is.True);
+    repoMock.Verify(r => r.DeleteMediaById(7), Times.Once);
+}
+
+[Test]
+public void DeleteMedia_BodyIsNullLiteral_ThrowsException_AndDoesNotCallRepo()
+{
+    var request = new HttpRequest
+    {
+        Body = "null"
+    };
+
+    var repoMock = new Mock<IMediaRepository>();
+    var service = new MediaService(repoMock.Object);
+
+    Assert.That(
+        () => service.DeleteMediaById(request),
+        Throws.Exception.With.Message.EqualTo("Deserialisierung fehlgeschlagen")
+    );
+
+    repoMock.Verify(r => r.DeleteMediaById(It.IsAny<int>()), Times.Never);
+}
+
+[Test]
+public void ChangeMedia_ValidJson_CallsRepoAndReturnsUpdatedMedia()
+{
+    var request = new HttpRequest
+    {
+        Body = @"
+        {
+          ""mediaId"": 42,
+          ""title"": ""New Title"",
+          ""description"": ""New Desc"",
+          ""mediaType"": ""movie"",
+          ""releaseYear"": 2024,
+          ""genres"": [""Sci-Fi"", ""Thriller""],
+          ""ageRestriction"": 16
+        }"
+    };
+
+    var updated = new MediaElement
+    {
+        MediaId = 42,
+        Title = "New Title",
+        Description = "New Desc",
+        MediaType = "movie",
+        ReleaseYear = 2024,
+        Genres = "Sci-Fi,Thriller",
+        AgeRestriction = 16
+    };
+
+    var repoMock = new Mock<IMediaRepository>();
+    repoMock
+        .Setup(r => r.ChangeMedia(It.IsAny<ChangeMedia>()))
+        .Returns(updated);
+
+    var service = new MediaService(repoMock.Object);
+
+    var result = service.ChangeMedia(request);
+
+    Assert.That(result, Is.Not.Null);
+    Assert.That(result.MediaId, Is.EqualTo(42));
+    Assert.That(result.Title, Is.EqualTo("New Title"));
+    Assert.That(result.ReleaseYear, Is.EqualTo(2024));
+    Assert.That(result.AgeRestriction, Is.EqualTo(16));
+
+    repoMock.Verify(r => r.ChangeMedia(It.Is<ChangeMedia>(m =>
+        m.MediaId == 42 &&
+        m.Title == "New Title" &&
+        m.Description == "New Desc" &&
+        m.MediaType == "movie" &&
+        m.ReleaseYear == 2024 &&
+        m.Genres != null &&
+        m.Genres[0] == "Sci-Fi" &&
+        m.Genres[1] == "Thriller" &&
+        m.AgeRestriction == 16
+    )), Times.Once);
+}
+
+[Test]
+public void ChangeMedia_BodyIsNullLiteral_ThrowsException_AndDoesNotCallRepo()
+{
+    var request = new HttpRequest
+    {
+        Body = "null"
+    };
+
+    var repoMock = new Mock<IMediaRepository>();
+    var service = new MediaService(repoMock.Object);
+
+    Assert.That(
+        () => service.ChangeMedia(request),
+        Throws.Exception.With.Message.EqualTo("Deserialisierung fehlgeschlagen")
+    );
+
+    repoMock.Verify(r => r.ChangeMedia(It.IsAny<ChangeMedia>()), Times.Never);
+}
 }

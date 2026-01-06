@@ -291,4 +291,76 @@ public void DeleteRating_CurrentActiveUserIsNull_ThrowsUnauthorizedAccessExcepti
     repoMock.Verify(r => r.GetRating(It.IsAny<int>()), Times.Never);
     repoMock.Verify(r => r.DeleteRating(It.IsAny<ChooseRating>()), Times.Never);
 }
+[Test]
+public void LikeRateing_ValidJson_SetsUserIdFromCurrentUser_CallsLikeRating_AndReturnsTrue()
+{
+    // Vorbereitung
+    var request = new HttpRequest
+    {
+        Body = "{\"ratingId\": 10}"
+    };
+
+    var currentUser = new CurrentActiveUser { userId = 123 };
+
+    var repoMock = new Mock<IRatingsRepository>();
+    repoMock
+        .Setup(r => r.LikeRating(It.IsAny<ChooseRating>()))
+        .Returns(true);
+
+    var service = new RatingsService(repoMock.Object);
+
+    // Ausführen
+    var result = service.LikeRateing(request, currentUser);
+
+    // Überprüfen
+    Assert.That(result, Is.True);
+
+    repoMock.Verify(r => r.LikeRating(It.Is<ChooseRating>(dto =>
+            dto.RatingId == 10 &&
+            dto.UserId == 123   // <-- wird im Service gesetzt
+    )), Times.Once);
+}
+
+[Test]
+public void LikeRateing_BodyIsNullLiteral_ThrowsException_AndDoesNotCallRepo()
+{
+    var request = new HttpRequest { Body = "null" };
+    var currentUser = new CurrentActiveUser { userId = 123 };
+
+    var repoMock = new Mock<IRatingsRepository>();
+    var service = new RatingsService(repoMock.Object);
+
+    Assert.That(
+        () => service.LikeRateing(request, currentUser),
+        Throws.Exception.With.Message.EqualTo("Deserialisierung fehlgeschlagen")
+    );
+
+    repoMock.Verify(r => r.LikeRating(It.IsAny<ChooseRating>()), Times.Never);
+}
+[Test]
+public void LikeRateing_CurrentUserIsNull_ThrowsNullReferenceException()
+{
+    // Vorbereitung
+    var request = new HttpRequest
+    {
+        Body = "{\"ratingId\": 5}"
+    };
+
+    CurrentActiveUser currentUser = null;
+
+    var repoMock = new Mock<IRatingsRepository>();
+    var service = new RatingsService(repoMock.Object);
+
+    // Ausführen + Überprüfen
+    Assert.That(
+        () => service.LikeRateing(request, currentUser),
+        Throws.TypeOf<NullReferenceException>()
+    );
+
+    // Repository darf NICHT aufgerufen werden
+    repoMock.Verify(
+        r => r.LikeRating(It.IsAny<ChooseRating>()),
+        Times.Never
+    );
+}
 }
